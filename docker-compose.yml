@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  mlflow:
+    image: wasteant/wasteant:mlflow-python-3.8-slim
+    container_name: mlflow-tracking-server
+    build:
+      context: .  # Build from the current directory where the Dockerfile is located
+      dockerfile: mlflow.Dockerfile
+    environment:
+      MLFLOW_TRACKING_URI: http://0.0.0.0:5000
+      BACKEND_STORE_URI: postgresql://mlflow_user:mlflow_password@postgres:5432/mlflow_db
+      ARTIFACT_ROOT: /mnt/mlflow/artifacts
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    volumes:
+      - ~/mlruns:/mnt/mlflow/artifacts  # Local folder to store artifacts
+    command: >
+      --backend-store-uri postgresql://mlflow_user:mlflow_password@postgres:5432/mlflow_db 
+      --default-artifact-root /mnt/mlflow/artifacts 
+      --host 0.0.0.0
+
+  postgres:
+    image: postgres:latest
+    container_name: mlflow-tracking-postgres
+    environment:
+      POSTGRES_USER: mlflow_user
+      POSTGRES_PASSWORD: mlflow_password
+      POSTGRES_DB: mlflow_db
+    ports:
+      - "5129:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mlflow-tracking:
+    image: wasteant/wasteant:mlflow-12.5.1-cudnn-runtime-ubuntu22.04
+    container_name: mlflow-tracking-core
+    stdin_open: true
+    tty: true
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        user: ${user}
+        userid: ${userid}
+        group: ${group}
+        groupid: ${groupid}
+    ports:
+      - ${INET_HTTP_SERVER_PORT}:${INET_HTTP_SERVER_PORT}
+    restart: unless-stopped
+    depends_on:
+      - mlflow
+    volumes:
+      - .:/home/$user/src
+      - ~/mlruns:/mnt/mlflow/artifacts
+      - /media/$user/mlflow:/media/$user/mlflow
+    user: ${user}
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  postgres_data:
