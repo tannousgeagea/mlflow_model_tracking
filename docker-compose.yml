@@ -56,7 +56,7 @@ services:
     volumes:
       - .:/home/$user/src
       - ~/mlruns:/mnt/mlflow/artifacts
-      - /media/$user/mlflow:/media/$user/mlflow
+      # - /media/$user/mlflow:/media/$user/mlflow
     user: ${user}
     # deploy:
     #   resources:

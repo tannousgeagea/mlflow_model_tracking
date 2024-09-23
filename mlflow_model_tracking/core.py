@@ -19,11 +19,14 @@ class ModelWrapper(mlflow.pyfunc.PythonModel):
 
     def load_context(self, context):
         # Load the YOLO model
-        self.model = YOLO(self.weights)
+        self.model = YOLO(context.artifacts['weights'])
         
-    def predict(self, context, model_input:str, conf:float=0.25, mode='detect'):
-        results = self.model.predict(model_input, conf=conf) if mode=="detect" else self.model.track(model_input, conf=conf, persist=True)
+    def predict(self, context, model_input):
+        results = self.model.predict(model_input)
         return results
+    
+    def infer(self, model_input:str, conf:float=0.25):
+        return self.model.predict(model_input, conf=conf)
     
     def track(self, model_input:str, conf:float=0.25):
         return self.model.track(model_input, conf=conf, persist=True)
@@ -37,6 +40,7 @@ def push(model_name, model_path):
         mlflow.pyfunc.log_model(
             artifact_path="model",
             python_model=yolo_model,
+            artifacts={"weights": model_path},
             conda_env={
                 'name': 'mlflow-env',
                 'channels': ['defaults', 'conda-forge'],
@@ -105,4 +109,4 @@ def pull(model_name, run_id:str=None):
     
     logging.info(f"Currend Model Version {model.metadata.run_id} does not match! Downloading new model version {model_version.run_id}")
     local_path = mlflow.artifacts.download_artifacts(artifact_uri=model_uri, dst_path=local_dir)
-    return mlflow.pyfunc.load_model(model_uri)
+    return mlflow.pyfunc.load_model(local_path)
