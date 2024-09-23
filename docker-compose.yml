@@ -65,6 +65,6 @@ services:
     #         - driver: nvidia
     #           count: 1
     #           capabilities: [gpu]
-
+ 
 volumes:
   postgres_data:

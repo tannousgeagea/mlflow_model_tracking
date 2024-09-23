@@ -18,6 +18,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # install mlfow
 RUN pip3 install mlflow
+RUN pip3 install lapx>=0.5.2
+RUN pip3 install azureml-mlflow
 
 # upgrade everything
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get upgrade -q -y \

@@ -1,8 +1,5 @@
 import os
 
-
-
-
 def print_model_info(rm):
     print("--Model--")
     print("name: {}".format(rm.name))
