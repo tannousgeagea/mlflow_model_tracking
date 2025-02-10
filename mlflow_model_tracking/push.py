@@ -1,10 +1,17 @@
 
 from core import push, client
 
-model_name = "iserlohn.amk.want:waste.impurity"
-model_path = "/media/appuser/mlflow/base.impurity.pt"
+model_name = "iserlohn.amk.front.want:waste.impurity"
+model_path = "/media/appuser/mlflow/amk.front.impurity.v7.pt"
 
-push(model_name=model_name, model_path=model_path)
+metrics = {
+    "mAP50": 0.66,
+    "mAP50-95": 0.45,
+    "precision": 0.755,
+    "recall": 0.592,
+}
+
+push(model_name=model_name, model_path=model_path, metrics=metrics)
 
 # # client.delete_registered_model(name='wasteant-segments')
 

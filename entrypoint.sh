@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e
 
-sudo -E supervisord -n -c /etc/supervisord.conf
+# sudo -E supervisord -n -c /etc/supervisord.conf
+/bin/bash 
