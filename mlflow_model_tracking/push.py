@@ -1,14 +1,14 @@
 
 from core import push, client
 
-model_name = "iserlohn.amk.front.want:waste.impurity"
-model_path = "/media/appuser/mlflow/amk.front.impurity.v7.pt"
+model_name = "WasteTruckParts_agr_V1"
+model_path = "/media/appuser/mlflow/TruckGate_agr_V1.pt"
 
 metrics = {
-    "mAP50": 0.66,
-    "mAP50-95": 0.45,
-    "precision": 0.755,
-    "recall": 0.592,
+    "mAP50": 0.926,
+    "mAP50-95": 0.712,
+    "precision": 0.97,
+    "recall": 0.7,
 }
 
 push(model_name=model_name, model_path=model_path, metrics=metrics)
