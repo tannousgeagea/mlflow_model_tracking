@@ -63,9 +63,6 @@ def push(model_name, model_path, metrics:dict=None):
         if metrics:
             for k, v in metrics.items():
                 mlflow.log_metric(k, v)
-                mlflow.log_metric("mAP50-95", 0.494)
-                mlflow.log_metric("recall", 0.655)
-                mlflow.log_metric('precision', 0.818)
 
     result = mlflow.register_model(
         model_uri=f"runs:/{run.info.run_id}/model",

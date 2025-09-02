@@ -1,14 +1,14 @@
 
 from core import push, client
 
-model_name = "WasteTruckParts_agr_V1"
-model_path = "/media/appuser/mlflow/TruckGate_agr_V1.pt"
+model_name = "WasteImpurityMultiClass_brewa_conveyor_yolom"
+model_path = "/media/appuser/mlflow/WasteImpurityMultiClass_brewa_conveyor_yolom_V1.pt"
 
 metrics = {
-    "mAP50": 0.926,
-    "mAP50-95": 0.712,
-    "precision": 0.97,
-    "recall": 0.7,
+    "mAP50": 0.453,
+    "mAP50-95": 0.37,
+    "precision": 0.56,
+    "recall": 0.51,
 }
 
 push(model_name=model_name, model_path=model_path, metrics=metrics)
