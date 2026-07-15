@@ -32,7 +32,7 @@ class ModelWrapper(mlflow.pyfunc.PythonModel):
         return self.model.track(model_input, conf=conf, persist=True)
     
     
-def push(model_name, model_path, metrics:dict=None):
+def push(model_name, model_path, metrics:dict=None, tags:list=None):
     # Start an MLflow run
     with mlflow.start_run() as run:
         yolo_model = ModelWrapper(weights=model_path)
@@ -59,7 +59,7 @@ def push(model_name, model_path, metrics:dict=None):
         )
         
         # Optionally, log other parameters and metrics
-        mlflow.log_param("model_type", "YOLOv11")
+        mlflow.log_param("model_type", "WADetection")
         if metrics:
             for k, v in metrics.items():
                 mlflow.log_metric(k, v)
@@ -75,7 +75,11 @@ def push(model_name, model_path, metrics:dict=None):
         alias=ALIAS_PROD,
         version=new_version
     )
-        
+
+    if tags:
+        for tag in tags:
+            client.set_registered_model_tag(model_name, tag, "true")   
+
     model = client.get_registered_model(model_name)
     print_model_info(model)
 

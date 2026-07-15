@@ -40,6 +40,8 @@ services:
     stdin_open: true
     tty: true
     env_file: .env
+    dns:
+      - 10.0.0.5
     build:
       context: .
       dockerfile: Dockerfile
@@ -56,7 +58,7 @@ services:
     volumes:
       - .:/home/$user/src
       # - ~/mlruns:/mnt/mlflow/artifacts
-      - /home/tannous/Desktop/ml_models:/media/$user/mlflow
+      - /home/wasteant/ws/tannous/TrainML/TrainMLMedia:/media/$user/mlflow
     user: ${user}
     # deploy:
     #   resources:
